@@ -1,0 +1,97 @@
+{
+    "$ref": "#/$defs/Configuration",
+    "$defs": {
+        "Configuration": {
+            "title": "Configuration",
+            "type": "object",
+            "properties": {
+                "namespaces": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "servers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/ServerDefinition"
+                    }
+                }
+            },
+            "required": [
+                "namespaces",
+                "servers"
+            ]
+        },
+        "ServerDefinition": {
+            "title": "ServerDefinition",
+            "type": "object",
+            "properties": {
+                "port": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "objects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/ObjectDefinition"
+                    }
+                }
+            },
+            "required": [
+                "port",
+                "path",
+                "objects"
+            ]
+        },
+        "ObjectDefinition": {
+            "title": "ObjectDefinition",
+            "type": "object",
+            "properties": {
+                "ns": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/VariableDefinition"
+                    }
+                }
+            },
+            "required": [
+                "ns",
+                "name",
+                "variables"
+            ]
+        },
+        "VariableDefinition": {
+            "title": "VariableDefinition",
+            "type": "object",
+            "properties": {
+                "ns": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "ns",
+                "name",
+                "min",
+                "max"
+            ]
+        }
+    }
+}
