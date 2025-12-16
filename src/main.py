@@ -33,18 +33,25 @@ async def main(config: Configuration):
 
     logger.info("Constructing servers...")
     for server_def in config.servers:
+        # Create server
         server = Server()
         info = ServerInfo(server)
         servers.append(info)
+
+        # server.init prints many meaningless errors into the log, so disable logging temporarily
         logging.root.setLevel(logging.ERROR)
         await server.init()
         logging.root.setLevel(logging.DEBUG)
+
+        # Create endpoint URI from config
         uri = urlparse(f"opc.tcp://0.0.0.0:{server_def.port}")._replace(path=server_def.path)
         server.set_endpoint(uri.geturl())
 
+        # Add the namespace from config into the server
         for i, namespace in enumerate(config.namespaces):
             info.ns_ids[i] = await server.register_namespace(namespace)
 
+        # Create all objects and variables in the server
         for object_def in server_def.objects:
             node = await server.nodes.objects.add_object(info.ns_ids[object_def.ns], object_def.name)
 
@@ -57,6 +64,8 @@ async def main(config: Configuration):
         await info.server.start()
 
     logger.info(f"Running, {len(variables)} variables across {len(servers)} servers")
+
+    # Periodically update variable values
     while True:
         await asyncio.sleep(1)
 
